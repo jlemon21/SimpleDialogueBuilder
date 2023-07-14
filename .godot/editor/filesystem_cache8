@@ -1,0 +1,16 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1689301046
+icon.svg::CompressedTexture2D::8645174802088639032::1689274809::1689274813::1::::<><>::
+SimpleDialogueBuilder.gd::GDScript::-1::1689301046::0::1::::DialogueBuilder<>Control<>::
+SimpleDialogueBuilder.tscn::PackedScene::1612770565104810553::1689301046::0::1::::<><>::res://SimpleDialogueBuilder.gd
+::res://graph_node_test/::1689300564
+TestCustomGraphNode.gd::GDScript::-1::1689299024::0::1::::<>GraphNode<>::
+TestCustomGraphNode.tscn::PackedScene::7658507319816339927::1689300564::0::1::::<><>::res://graph_node_test/TestCustomGraphNode.gd
+::res://my_controls/::1689299646
+::res://my_graph_node/::1689300887
+MyGraphNode.gd::GDScript::-1::1689300740::0::1::::MyGraphNode<>GraphNode<>::
+MyGraphNode.tscn::PackedScene::1171514958092925572::1689300848::0::1::::<><>::res://my_graph_node/MyGraphNode.gd
+::res://my_graph_node/dialogue_node/::1689301046
+DialogueNode.tscn::PackedScene::842985041575707861::1689301046::0::1::::<><>::uid://qxqxeks3gsee::::res://my_graph_node/MyGraphNode.tscn
+::res://my_graph_node/key_node/::1689300796
+KeyNode.tscn::PackedScene::5480005668866445805::1689300796::0::1::::<><>::uid://qxqxeks3gsee::::res://my_graph_node/MyGraphNode.tscn

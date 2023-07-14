@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://qxqxeks3gsee"]
+
+[ext_resource type="Script" path="res://my_graph_node/MyGraphNode.gd" id="1_ytwyw"]
+
+[node name="MyGraphNode" type="GraphNode"]
+show_close = true
+script = ExtResource("1_ytwyw")
+
+[connection signal="close_request" from="." to="." method="_on_close_request"]

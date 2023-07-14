@@ -1,0 +1,66 @@
+[gd_scene load_steps=3 format=3 uid="uid://cofrys8f2wmh1"]
+
+[ext_resource type="PackedScene" uid="uid://qxqxeks3gsee" path="res://my_graph_node/MyGraphNode.tscn" id="1_l7r8e"]
+[ext_resource type="Script" path="res://my_graph_node/response_branch_node/ResponseBranchNode.gd" id="2_w2q1j"]
+
+[node name="ResponseBranchNode" instance=ExtResource("1_l7r8e")]
+offset_right = 576.0
+offset_bottom = 204.0
+title = "Response Branch"
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color(1, 1, 1, 1)
+slot/2/left_icon = null
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color(1, 1, 1, 1)
+slot/2/right_icon = null
+slot/2/draw_stylebox = true
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color(1, 1, 1, 1)
+slot/3/left_icon = null
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color(1, 1, 1, 1)
+slot/3/right_icon = null
+slot/3/draw_stylebox = true
+script = ExtResource("2_w2q1j")
+
+[node name="ResponseText0" type="TextEdit" parent="." index="0"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "Response #0 text."
+
+[node name="ResponseText1" type="TextEdit" parent="." index="1"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "Response #1 text."
+
+[node name="ResponseText2" type="TextEdit" parent="." index="2"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "Response #2 text."
+
+[node name="ResponseText3" type="TextEdit" parent="." index="3"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "Response #3 text."
