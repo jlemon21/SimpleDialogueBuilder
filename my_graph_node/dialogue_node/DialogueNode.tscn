@@ -43,6 +43,15 @@ slot/3/right_type = 0
 slot/3/right_color = Color(1, 1, 1, 1)
 slot/3/right_icon = null
 slot/3/draw_stylebox = true
+slot/4/left_enabled = false
+slot/4/left_type = 0
+slot/4/left_color = Color(1, 1, 1, 1)
+slot/4/left_icon = null
+slot/4/right_enabled = false
+slot/4/right_type = 0
+slot/4/right_color = Color(1, 1, 1, 1)
+slot/4/right_icon = null
+slot/4/draw_stylebox = true
 script = ExtResource("2_r6nvf")
 
 [node name="DialogueHeader" type="Label" parent="." index="0"]
@@ -54,24 +63,54 @@ custom_minimum_size = Vector2(0, 216)
 layout_mode = 2
 wrap_mode = 1
 
-[node name="DialogueOptions" type="Label" parent="." index="2"]
-layout_mode = 2
-text = "Dialogue Options"
-
-[node name="OptionContainer" type="HBoxContainer" parent="." index="3"]
+[node name="InflectionContainer" type="HBoxContainer" parent="." index="2"]
 layout_mode = 2
 
-[node name="OptionButton" type="OptionButton" parent="OptionContainer" index="0"]
+[node name="InflectionLabel" type="Label" parent="InflectionContainer" index="0"]
+custom_minimum_size = Vector2(174, 0)
 layout_mode = 2
-item_count = 3
+text = "Inflection"
+
+[node name="InflectionType" type="OptionButton" parent="InflectionContainer" index="1"]
+custom_minimum_size = Vector2(168, 0)
+layout_mode = 2
+item_count = 6
+selected = 0
+popup/item_0/text = "Default"
+popup/item_0/id = 0
+popup/item_1/text = "Happy"
+popup/item_1/id = 1
+popup/item_2/text = "Sad"
+popup/item_2/id = 2
+popup/item_3/text = "Angry"
+popup/item_3/id = 3
+popup/item_4/text = "Afraid"
+popup/item_4/id = 4
+popup/item_5/text = "Surprise"
+popup/item_5/id = 5
+
+[node name="DialogueOptions" type="Label" parent="." index="3"]
+layout_mode = 2
+text = "Dialogue Effects
+"
+
+[node name="EffectContainer" type="HBoxContainer" parent="." index="4"]
+layout_mode = 2
+
+[node name="EffectButton" type="OptionButton" parent="EffectContainer" index="0"]
+layout_mode = 2
+item_count = 4
 selected = 0
 popup/item_0/text = "None"
 popup/item_0/id = 0
-popup/item_1/text = "Give Information"
+popup/item_1/text = "Save Event"
 popup/item_1/id = 1
-popup/item_2/text = "Give Item"
+popup/item_2/text = "Give Information"
 popup/item_2/id = 2
+popup/item_3/text = "Give Item"
+popup/item_3/id = 3
 
-[node name="OptionArgument" type="LineEdit" parent="OptionContainer" index="1"]
+[node name="EffectArgument" type="LineEdit" parent="EffectContainer" index="1"]
 custom_minimum_size = Vector2(168, 0)
 layout_mode = 2
+placeholder_text = "Effect Argument"

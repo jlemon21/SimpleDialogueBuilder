@@ -1,8 +1,8 @@
-LineEdit
+Label
 HBoxContainer
+LineEdit
 OptionButton
 TextEdit
-Label
 GraphNode
 Button
 Panel

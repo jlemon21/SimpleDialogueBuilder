@@ -1,12 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://ckcs5l800ehnh"]
 
-[ext_resource type="PackedScene" uid="uid://qxqxeks3gsee" path="res://my_graph_node/MyGraphNode.tscn" id="1_ccire"]
-[ext_resource type="Script" path="res://my_graph_node/key_node/KeyNode.gd" id="2_75edd"]
+[ext_resource type="PackedScene" uid="uid://qxqxeks3gsee" path="res://my_graph_node/MyGraphNode.tscn" id="1_a4uvu"]
+[ext_resource type="Script" path="res://my_graph_node/character_key_node/CharacterKeyNode.gd" id="2_1jy2d"]
 
-[node name="KeyNode" instance=ExtResource("1_ccire")]
+[node name="CharacterKeyNode" instance=ExtResource("1_a4uvu")]
 offset_right = 192.0
 offset_bottom = 85.0
-title = "Key"
+title = "Character Key"
 slot/0/left_enabled = false
 slot/0/left_type = 0
 slot/0/left_color = Color(1, 1, 1, 1)
@@ -16,9 +16,9 @@ slot/0/right_type = 0
 slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
-script = ExtResource("2_75edd")
+script = ExtResource("2_1jy2d")
 
 [node name="Key" type="LineEdit" parent="." index="0"]
 layout_mode = 2
-placeholder_text = "Character Key"
+placeholder_text = "Key"
 metadata/_edit_lock_ = true
