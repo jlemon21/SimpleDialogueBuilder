@@ -8,3 +8,6 @@ func _ready() -> void:
 
 func get_key() -> String:
 	return CharacterKey.text
+
+func import_key(key_string: String) -> void:
+	CharacterKey.text = key_string

@@ -27,12 +27,13 @@ func _on_new_dialogue_pressed() -> void:
 func _on_new_response_branch_pressed() -> void:
 	_add_new_graph_node(response_node_packed)
 
-func _add_new_graph_node(graph_node_packed: PackedScene) -> void:
+func _add_new_graph_node(graph_node_packed: PackedScene) -> MyGraphNode:
 	var new_graph_node: MyGraphNode = graph_node_packed.instantiate()
 	DialogueGraph.add_child(new_graph_node)
 	if new_graph_node is CharacterKeyNode:
 		_register_character_key(new_graph_node)
 	new_graph_node.close_requested.connect(Callable(self, "_on_close_requested"))
+	return new_graph_node
 
 func _register_character_key(character_key_node: CharacterKeyNode) -> void:
 	_character_key_dictionary[character_key_node.name] = {
@@ -79,11 +80,75 @@ func _get_node_connections(node_name: StringName, from_port: int = -1) -> Array[
 	return return_array
 
 func _on_import_pressed() -> void:
-	print("import attempted")
+	var dir_access: DirAccess = DirAccess.open(IMPORT_DIRECTORY_ROOT)
+	var import_directory_files: Array = dir_access.get_files()
+	if import_directory_files.is_empty():
+		printerr("SimpleDialogueBuilder @ _on_import_pressed(): Import directory is empty.")
+		return
+		
+	_free_all_graph_nodes()
+	
+	var file_access: FileAccess = FileAccess.open(str(IMPORT_DIRECTORY_ROOT, "/", import_directory_files[0]), FileAccess.READ)
+	var import_file: Dictionary = JSON.parse_string(file_access.get_line())
+	file_access.close()
+	
+	_reset_character_key_dictionary(import_file["character_keys"])
+	_populate_graph_from_import_file(import_file["all_dialogue"])
+	_restore_node_connections(import_file["all_connections"])
+	
+	### NEED TO REPOPULATE KEYS IN CHARACTER KEY DICTIONARY ALSO ###
+
+func _free_all_graph_nodes() -> void:
+	for node in DialogueGraph.get_children():
+		_handle_close_graph_node(node.name)
+
+func _reset_character_key_dictionary(character_keys: Dictionary) -> void:
+	_character_key_dictionary = character_keys
+
+func _populate_graph_from_import_file(all_dialogue: Dictionary) -> void:
+	for node_name in all_dialogue.keys():
+		match all_dialogue[node_name]["node_type"]:
+			"character_key":
+				var character_key: CharacterKeyNode = _add_new_graph_node(character_key_node_packed)
+				character_key.name = node_name
+				character_key.position_offset = Vector2(
+					all_dialogue[node_name]["position_offset_x"],
+					all_dialogue[node_name]["position_offset_y"]
+				)
+				character_key.import_key(all_dialogue[node_name]["character_key"])
+			"dialogue_trigger":
+				var dialogue_trigger: DialogueTriggerNode = _add_new_graph_node(dialogue_trigger_node_packed)
+				dialogue_trigger.name = node_name
+				dialogue_trigger.position_offset = Vector2(
+					all_dialogue[node_name]["position_offset_x"],
+					all_dialogue[node_name]["position_offset_y"]
+				)
+				dialogue_trigger.import_trigger_condition(all_dialogue[node_name]["dialogue_trigger"])
+			"dialogue":
+				var dialogue_node: DialogueNode = _add_new_graph_node(dialogue_node_packed)
+				dialogue_node.name = node_name
+				dialogue_node.position_offset = Vector2(
+					all_dialogue[node_name]["position_offset_x"],
+					all_dialogue[node_name]["position_offset_y"]
+				)
+				dialogue_node.import_dialogue_text(all_dialogue[node_name]["dialogue_text"])
+				dialogue_node.import_inflection(all_dialogue[node_name]["inflection"])
+				dialogue_node.import_dialogue_options(all_dialogue[node_name]["dialogue_options"])
+			"response_branch":
+				var response_branch: ResponseBranchNode = _add_new_graph_node(response_node_packed)
+				response_branch.name = node_name
+				response_branch.position_offset = Vector2(
+					all_dialogue[node_name]["position_offset_x"],
+					all_dialogue[node_name]["position_offset_y"]
+				)
+				response_branch.import_response_text(all_dialogue[node_name]["response_text"])
+
+func _restore_node_connections(all_connections: Array) -> void:
+	for connection in all_connections:
+		DialogueGraph.connect_node(connection["from"], connection["from_port"], connection["to"], connection["to_port"])
 
 func _on_export_pressed() -> void:
 	_clear_old_data()
-	#_write_graph_node_configuration() #??
 	_write_character_dialogue_triggers()
 	_write_all_dialogue_connections()
 	_write_to_export_folder()
@@ -103,14 +168,36 @@ func _write_character_dialogue_triggers() -> void:
 
 func _write_all_dialogue_connections() -> void:
 	for node in DialogueGraph.get_children():
-		if node is DialogueNode:
+		if node is CharacterKeyNode:
+			_write_character_key_node(node)
+		if node is DialogueTriggerNode:
+			_write_dialogue_trigger_node(node)
+		elif node is DialogueNode:
 			_write_dialogue_node(node)
 		elif node is ResponseBranchNode:
 			_write_response_branch_node(node)
 
+func _write_character_key_node(character_key_node: CharacterKeyNode) -> void:
+	_all_dialogue_nodes[character_key_node.name] = {
+		"node_type": "character_key",
+		"position_offset_x": character_key_node.position_offset.x,
+		"position_offset_y": character_key_node.position_offset.y,
+		"character_key": character_key_node.get_key()
+	}
+
+func _write_dialogue_trigger_node(dialogue_trigger_node: DialogueTriggerNode) -> void:
+	_all_dialogue_nodes[dialogue_trigger_node.name] = {
+		"node_type": "dialogue_trigger",
+		"position_offset_x": dialogue_trigger_node.position_offset.x,
+		"position_offset_y": dialogue_trigger_node.position_offset.y,
+		"dialogue_trigger": dialogue_trigger_node.get_trigger_condition()
+	}
+
 func _write_dialogue_node(dialogue_node: DialogueNode) -> void:
 	_all_dialogue_nodes[dialogue_node.name] = {
 		"node_type": "dialogue",
+		"position_offset_x": dialogue_node.position_offset.x,
+		"position_offset_y": dialogue_node.position_offset.y,
 		"dialogue_text": dialogue_node.get_dialogue_text(),
 		"inflection": dialogue_node.get_inflection(),
 		"dialogue_options": dialogue_node.get_dialogue_options(),
@@ -118,15 +205,20 @@ func _write_dialogue_node(dialogue_node: DialogueNode) -> void:
 	}
 
 func _write_response_branch_node(response_node: ResponseBranchNode) -> void:
-	var response_dictionary: Dictionary = {}
+	var connections_array: Array = []
 	for i in range(4):
 		var response_connection: Array = _get_node_connections(response_node.name, i)
 		if !response_connection.is_empty():
-			response_dictionary[response_node.get_response(i)] = response_connection[0]["to"]
+			connections_array.append(response_connection[0]["to"])
+		else:
+			connections_array.append("")
 	
 	_all_dialogue_nodes[response_node.name] = {
 		"node_type": "response_branch",
-		"responses": response_dictionary
+		"position_offset_x": response_node.position_offset.x,
+		"position_offset_y": response_node.position_offset.y,
+		"response_text": response_node.get_response_text(),
+		"response_connections": connections_array
 	}
 
 func _write_to_export_folder() -> void:
@@ -135,7 +227,8 @@ func _write_to_export_folder() -> void:
 		dir_access.make_dir(EXPORT_DIRECTORY_ROOT)
 	var master_dictionary: Dictionary = {
 		"character_keys": _character_key_dictionary,
-		"all_dialogue": _all_dialogue_nodes
+		"all_dialogue": _all_dialogue_nodes,
+		"all_connections": DialogueGraph.get_connection_list()
 	}
 	var master_dictionary_string: String = JSON.stringify(master_dictionary)
 	var file_access_directory: String = str(EXPORT_DIRECTORY_ROOT, "/dialogue_export.json")

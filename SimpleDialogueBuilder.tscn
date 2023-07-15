@@ -11,15 +11,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_c3re5")
 
-[node name="DialogueGraph" type="GraphEdit" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="ButtonContainer" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 10
@@ -98,11 +89,20 @@ layout_mode = 2
 text = "Export"
 metadata/_edit_lock_ = true
 
-[connection signal="connection_request" from="DialogueGraph" to="." method="_on_dialogue_graph_connection_request"]
-[connection signal="delete_nodes_request" from="DialogueGraph" to="." method="_on_dialogue_graph_delete_nodes_request"]
+[node name="DialogueGraph" type="GraphEdit" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [connection signal="pressed" from="ButtonContainer/CreateNewButtonsContainer/NewCharacter" to="." method="_on_new_character_pressed"]
 [connection signal="pressed" from="ButtonContainer/CreateNewButtonsContainer/NewDialogueTrigger" to="." method="_on_new_dialogue_trigger_pressed"]
 [connection signal="pressed" from="ButtonContainer/CreateNewButtonsContainer/NewDialogue" to="." method="_on_new_dialogue_pressed"]
 [connection signal="pressed" from="ButtonContainer/CreateNewButtonsContainer/NewResponseBranch" to="." method="_on_new_response_branch_pressed"]
 [connection signal="pressed" from="ButtonContainer/ImportExportContainer/Import" to="." method="_on_import_pressed"]
 [connection signal="pressed" from="ButtonContainer/ImportExportContainer/Export" to="." method="_on_export_pressed"]
+[connection signal="connection_request" from="DialogueGraph" to="." method="_on_dialogue_graph_connection_request"]
+[connection signal="delete_nodes_request" from="DialogueGraph" to="." method="_on_dialogue_graph_delete_nodes_request"]
