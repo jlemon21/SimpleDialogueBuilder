@@ -30,6 +30,7 @@ func _on_new_response_branch_pressed() -> void:
 func _add_new_graph_node(graph_node_packed: PackedScene) -> MyGraphNode:
 	var new_graph_node: MyGraphNode = graph_node_packed.instantiate()
 	DialogueGraph.add_child(new_graph_node)
+	new_graph_node.name = new_graph_node.name.replace("@", "_")
 	new_graph_node.position_offset = (Vector2(640, 360) + DialogueGraph.scroll_offset)
 	if new_graph_node is CharacterKeyNode:
 		_register_character_key(new_graph_node)
@@ -103,8 +104,6 @@ func _on_import_pressed() -> void:
 	_reset_character_key_dictionary(import_file["character_keys"])
 	_populate_graph_from_import_file(import_file["all_dialogue"])
 	_restore_node_connections(import_file["all_connections"])
-	
-	### NEED TO REPOPULATE KEYS IN CHARACTER KEY DICTIONARY ALSO ###
 
 func _free_all_graph_nodes() -> void:
 	for node in DialogueGraph.get_children():
@@ -153,7 +152,8 @@ func _populate_graph_from_import_file(all_dialogue: Dictionary) -> void:
 
 func _restore_node_connections(all_connections: Array) -> void:
 	for connection in all_connections:
-		DialogueGraph.connect_node(connection["from"], connection["from_port"], connection["to"], connection["to_port"])
+		@warning_ignore("unused_variable")
+		var error: Error = DialogueGraph.connect_node(connection["from"], connection["from_port"], connection["to"], connection["to_port"])
 
 func _on_export_pressed() -> void:
 	_clear_old_data()
