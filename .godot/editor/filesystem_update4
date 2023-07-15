@@ -1,4 +1,2 @@
 res://SimpleDialogueBuilder.tscn
 res://SimpleDialogueBuilder.gd
-res://my_graph_node/dialogue_trigger_node/DialogueTriggerNode.tscn
-res://my_graph_node/response_branch_node/ResponseBranchNode.tscn

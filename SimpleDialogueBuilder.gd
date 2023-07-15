@@ -94,6 +94,7 @@ func _on_import_pressed() -> void:
 		return
 		
 	_free_all_graph_nodes()
+	await get_tree().process_frame
 	
 	var file_access: FileAccess = FileAccess.open(str(IMPORT_DIRECTORY_ROOT, "/", import_directory_files[0]), FileAccess.READ)
 	var import_file: Dictionary = JSON.parse_string(file_access.get_line())
