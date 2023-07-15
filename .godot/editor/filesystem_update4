@@ -1,11 +1,4 @@
 res://SimpleDialogueBuilder.tscn
 res://SimpleDialogueBuilder.gd
-res://my_graph_node/character_key_node/CharacterKeyNode.tscn
-res://my_graph_node/character_key_node/CharacterKeyNode.gd
 res://my_graph_node/dialogue_trigger_node/DialogueTriggerNode.tscn
-res://my_graph_node/dialogue_trigger_node/DialogueTriggerNode.gd
-res://my_graph_node/dialogue_node/DialogueNode.tscn
-res://my_graph_node/dialogue_node/DialogueNode.gd
-res://my_graph_node/response_branch_node/ResponseBranchNode.gd
-res://export/dialogue_export.json
 res://my_graph_node/response_branch_node/ResponseBranchNode.tscn

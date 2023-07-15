@@ -1,12 +1,12 @@
+GraphNode
+GraphEdit
 Label
 HBoxContainer
 LineEdit
 OptionButton
 TextEdit
-GraphNode
 Button
 Panel
 PanelContainer
 Control
 VBoxContainer
-GraphEdit

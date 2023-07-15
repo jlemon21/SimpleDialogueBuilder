@@ -30,6 +30,7 @@ func _on_new_response_branch_pressed() -> void:
 func _add_new_graph_node(graph_node_packed: PackedScene) -> MyGraphNode:
 	var new_graph_node: MyGraphNode = graph_node_packed.instantiate()
 	DialogueGraph.add_child(new_graph_node)
+	new_graph_node.position_offset = (Vector2(640, 360) + DialogueGraph.scroll_offset)
 	if new_graph_node is CharacterKeyNode:
 		_register_character_key(new_graph_node)
 	new_graph_node.close_requested.connect(Callable(self, "_on_close_requested"))
@@ -42,12 +43,18 @@ func _register_character_key(character_key_node: CharacterKeyNode) -> void:
 	}
 
 func _on_dialogue_graph_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	var from_node_scene: MyGraphNode = DialogueGraph.get_node(str(from_node))
+	var to_node_scene: MyGraphNode = DialogueGraph.get_node(str(to_node))
+	if from_node_scene is CharacterKeyNode and !(to_node_scene is DialogueTriggerNode):
+		return
+	elif from_node_scene is DialogueTriggerNode and !(to_node_scene is DialogueNode):
+		return
+	elif from_node_scene is DialogueNode and ((to_node_scene is CharacterKeyNode) or (to_node_scene is DialogueTriggerNode)):
+		return
+	elif from_node_scene is ResponseBranchNode and !(to_node_scene is DialogueNode):
+		return
 	@warning_ignore("unused_variable")
 	var error: Error = DialogueGraph.connect_node(from_node, from_port, to_node, to_port)
-	
-	# Write this connection data to the MyGraphNode scene?
-	# Update when nodes are disconnected as well, use custom _connect_node(), _disconnect_node() functions to handle this change. 
-	# Make traversal from Key nodes through trees to export to JSON easier, potentially.
 
 func _on_close_requested(graph_node: GraphNode) -> void:
 	_handle_close_graph_node(graph_node.name)
@@ -231,8 +238,10 @@ func _write_to_export_folder() -> void:
 		"all_connections": DialogueGraph.get_connection_list()
 	}
 	var master_dictionary_string: String = JSON.stringify(master_dictionary)
-	var file_access_directory: String = str(EXPORT_DIRECTORY_ROOT, "/dialogue_export.json")
-	var file: FileAccess = FileAccess.open(file_access_directory, FileAccess.WRITE)
+	var system_time_string: String = Time.get_datetime_string_from_system()
+	var system_time_string_replaced: String = system_time_string.replace(":", "-")
+	var file_access_path: String = str(EXPORT_DIRECTORY_ROOT, "/dialogue_export_", system_time_string_replaced,".json")
+	var file: FileAccess = FileAccess.open(file_access_path, FileAccess.WRITE)
 	file.store_string(master_dictionary_string)
 	file.close()
 
